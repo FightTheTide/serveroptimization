@@ -6,14 +6,15 @@ import java.net.*;
 public class Client {
     public static void main(String[] args) throws IOException {
          
-        if (args.length != 2) {
+        if (args.length != 3) {
             System.err.println(
-                "Usage: java EchoClient <host name> <port number>");
+                "Usage: java EchoClient <host name> <port number> <query>");
             System.exit(1);
         }
  
         String hostName = args[0];
         int portNumber = Integer.parseInt(args[1]);
+        String query = args[2];
  
         try (
             Socket socket = new Socket(hostName, portNumber);
@@ -21,22 +22,14 @@ public class Client {
             BufferedReader in = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
         ) {
-            BufferedReader stdIn =
-                new BufferedReader(new InputStreamReader(System.in));
             String fromServer;
-            String fromUser;
  
-            while ((fromServer = in.readLine()) != null) {
+            while ((fromServer = in.readLine()) != "done") {
                 System.out.println("Server: " + fromServer);
-                if (!fromServer.equals(null))
-                    break;
-                 
-                fromUser = stdIn.readLine();
-                if (fromUser != null) {
-                    System.out.println("Client: " + fromUser);
-                    out.println(fromUser);
-                }
+                out.println(query);
             }
+
+            System.out.println("Server: " + fromServer);
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);

@@ -1,7 +1,7 @@
 package edu.ucl.nima.content;
 
 public class ContentGenerator {
-    public String generate() {
-        return "Generic string";
+    public String generate(String query) {
+        return "Query value: " + query;
     }
 }
