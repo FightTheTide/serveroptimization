@@ -5,6 +5,9 @@ import java.io.*;
 import edu.ucl.nima.content.ContentGenerator;
 
 public class ConnectionHandler implements Runnable {
+    public static String HANDSHAKE = "ready";
+    public static String HANGUP = "done";
+
     private final Socket clientSocket;
 
     public ConnectionHandler(Socket clientSocket) {
@@ -18,12 +21,14 @@ public class ConnectionHandler implements Runnable {
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
         ){
             String fromClient;
-            out.println("ready");
+            System.out.println("In Connection Handler");
+            out.println(HANDSHAKE);
             if ((fromClient = in.readLine()) != null) {
+                System.out.println("Generating content");
                 outputLine = new ContentGenerator().generate(fromClient);
                 out.println(outputLine);
             }
-            out.println("done");
+            out.println(HANGUP);
         } catch (IOException e) {
             System.out.println("Exception caught when trying to read connection");
             System.out.println(e.getMessage());
