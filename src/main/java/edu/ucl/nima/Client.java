@@ -24,12 +24,13 @@ public class Client {
         ) {
             String fromServer;
  
-            while ((fromServer = in.readLine()) != "done") {
-                System.out.println("Server: " + fromServer);
-                out.println(query);
+            while (!(fromServer = in.readLine()).equals(ConnectionHandler.HANGUP)) {
+                if (fromServer.equals(ConnectionHandler.HANDSHAKE)) {
+                    out.println(query);
+                } else {
+                    System.out.println("Response: " + fromServer);
+                }
             }
-
-            System.out.println("Server: " + fromServer);
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);
